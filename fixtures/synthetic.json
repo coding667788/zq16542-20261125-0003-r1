@@ -1,0 +1,54 @@
+{
+  "fixture_id": "escrowclock-synthetic-v1",
+  "description": "All identities and identifiers are synthetic; no real credentials or personal data.",
+  "commands": [
+    {"command": "register_natural_person", "request_id": "fix-person-owner", "person_id": "np_owner_7001", "label": "synthetic owner", "at": 1},
+    {"command": "register_natural_person", "request_id": "fix-person-ada", "person_id": "np_ada_7002", "label": "synthetic Ada", "at": 1},
+    {"command": "register_natural_person", "request_id": "fix-person-bob", "person_id": "np_bob_7003", "label": "synthetic Bob", "at": 1},
+    {"command": "register_natural_person", "request_id": "fix-person-cara", "person_id": "np_cara_7004", "label": "synthetic Cara", "at": 1},
+    {"command": "register_natural_person", "request_id": "fix-person-dan", "person_id": "np_dan_7005", "label": "synthetic compliance officer", "at": 1},
+
+    {"command": "register_agent", "request_id": "fix-agent-owner", "agent_id": "ag_owner_portal", "person_id": "np_owner_7001", "label": "owner portal synthetic agent", "at": 2},
+    {"command": "register_agent", "request_id": "fix-agent-ada-laptop", "agent_id": "ag_ada_laptop", "person_id": "np_ada_7002", "label": "Ada laptop", "at": 2},
+    {"command": "register_agent", "request_id": "fix-agent-ada-cli", "agent_id": "ag_ada_cli", "person_id": "np_ada_7002", "label": "Ada CLI, same natural person", "at": 2},
+    {"command": "register_agent", "request_id": "fix-agent-bob", "agent_id": "ag_bob_desk", "person_id": "np_bob_7003", "label": "Bob desk", "at": 2},
+    {"command": "register_agent", "request_id": "fix-agent-cara", "agent_id": "ag_cara_hsm", "person_id": "np_cara_7004", "label": "Cara release HSM", "at": 2},
+    {"command": "register_agent", "request_id": "fix-agent-dan", "agent_id": "ag_dan_compliance", "person_id": "np_dan_7005", "label": "Dan compliance terminal", "at": 2},
+
+    {"command": "register_post", "request_id": "fix-post-intake", "post_id": "post_intake", "agent_id": "ag_ada_laptop", "valid_from": 0, "valid_to": 10000, "at": 3},
+    {"command": "register_post", "request_id": "fix-post-review", "post_id": "post_review", "agent_id": "ag_bob_desk", "valid_from": 0, "valid_to": 10000, "at": 3},
+    {"command": "register_post", "request_id": "fix-post-overlap", "post_id": "post_overlap_demo", "agent_id": "ag_ada_cli", "valid_from": 0, "valid_to": 10000, "at": 3},
+    {"command": "register_post", "request_id": "fix-post-release", "post_id": "post_release", "agent_id": "ag_cara_hsm", "valid_from": 0, "valid_to": 10000, "at": 3},
+
+    {"command": "approve_policy", "request_id": "fix-policy-baseline", "policy_id": "pol_baseline_v1", "effect": "none", "title": "Synthetic baseline escrow policy", "at": 4},
+
+    {"command": "create_application", "request_id": "fix-app-demo", "application_id": "app_demo", "owner_person_id": "np_owner_7001", "ticket_id": "tkt_demo", "approval_id": "apv_demo", "required_posts": ["post_intake", "post_review", "post_release"], "object_ids": ["obj_profile_7001", "obj_profile_7002"], "max_claims": 2, "valid_from": 10, "valid_to": 9000, "at": 10},
+    {"command": "issue_ticket", "request_id": "fix-demo-missing-predecessor", "application_id": "app_demo", "post_id": "post_review", "agent_id": "ag_bob_desk", "at": 11, "expect_error": "MISSING_PREDECESSOR"},
+
+    {"command": "create_application", "request_id": "fix-app-race", "application_id": "app_race", "owner_person_id": "np_owner_7001", "ticket_id": "tkt_race", "approval_id": "apv_race", "required_posts": ["post_intake", "post_review", "post_release"], "object_ids": ["obj_last_slot"], "max_claims": 1, "valid_from": 100, "valid_to": 9000, "at": 100},
+    {"command": "issue_ticket", "request_id": "fix-race-sig-1", "application_id": "app_race", "post_id": "post_intake", "agent_id": "ag_ada_laptop", "at": 101},
+    {"command": "issue_ticket", "request_id": "fix-race-sig-2", "application_id": "app_race", "post_id": "post_review", "agent_id": "ag_bob_desk", "at": 102},
+    {"command": "issue_ticket", "request_id": "fix-race-sig-3", "application_id": "app_race", "post_id": "post_release", "agent_id": "ag_cara_hsm", "at": 103},
+
+    {"command": "create_application", "request_id": "fix-app-spent", "application_id": "app_spent", "owner_person_id": "np_owner_7001", "ticket_id": "tkt_spent", "approval_id": "apv_spent", "required_posts": ["post_intake", "post_review", "post_release"], "object_ids": ["obj_spent_profile"], "max_claims": 1, "valid_from": 200, "valid_to": 9000, "at": 200},
+    {"command": "issue_ticket", "request_id": "fix-spent-sig-1", "application_id": "app_spent", "post_id": "post_intake", "agent_id": "ag_ada_laptop", "at": 201},
+    {"command": "issue_ticket", "request_id": "fix-spent-sig-2", "application_id": "app_spent", "post_id": "post_review", "agent_id": "ag_bob_desk", "at": 202},
+    {"command": "issue_ticket", "request_id": "fix-spent-sig-3", "application_id": "app_spent", "post_id": "post_release", "agent_id": "ag_cara_hsm", "at": 203},
+    {"command": "take_claim", "request_id": "fix-spent-take-1", "approval_id": "apv_spent", "claim_id": "claim_spent_1", "object_id": "obj_spent_profile", "agent_id": "ag_cara_hsm", "recipient_agent_id": "ag_owner_portal", "at": 210},
+
+    {"command": "create_application", "request_id": "fix-app-canceled", "application_id": "app_canceled", "owner_person_id": "np_owner_7001", "ticket_id": "tkt_canceled", "approval_id": "apv_canceled", "required_posts": ["post_intake", "post_review", "post_release"], "object_ids": ["obj_canceled"], "max_claims": 1, "valid_from": 300, "valid_to": 9000, "at": 300},
+    {"command": "issue_ticket", "request_id": "fix-canceled-sig-1", "application_id": "app_canceled", "post_id": "post_intake", "agent_id": "ag_ada_laptop", "at": 301},
+    {"command": "issue_ticket", "request_id": "fix-canceled-sig-2", "application_id": "app_canceled", "post_id": "post_review", "agent_id": "ag_bob_desk", "at": 302},
+    {"command": "issue_ticket", "request_id": "fix-canceled-sig-3", "application_id": "app_canceled", "post_id": "post_release", "agent_id": "ag_cara_hsm", "at": 303},
+    {"command": "cancel_authorization", "request_id": "fix-canceled-user", "approval_id": "apv_canceled", "person_id": "np_owner_7001", "at": 310},
+
+    {"command": "create_application", "request_id": "fix-app-overlap", "application_id": "app_overlap", "owner_person_id": "np_owner_7001", "ticket_id": "tkt_overlap", "approval_id": "apv_overlap", "required_posts": ["post_intake", "post_overlap_demo", "post_release"], "object_ids": ["obj_overlap"], "max_claims": 1, "valid_from": 400, "valid_to": 9000, "at": 400},
+    {"command": "issue_ticket", "request_id": "fix-overlap-sig-1", "application_id": "app_overlap", "post_id": "post_intake", "agent_id": "ag_ada_laptop", "at": 401},
+    {"command": "issue_ticket", "request_id": "fix-overlap-bad-same-person", "application_id": "app_overlap", "post_id": "post_overlap_demo", "agent_id": "ag_ada_cli", "at": 402, "expect_error": "NATURAL_PERSON_OVERLAP"},
+
+    {"command": "create_application", "request_id": "fix-app-expired", "application_id": "app_expired", "owner_person_id": "np_owner_7001", "ticket_id": "tkt_expired", "approval_id": "apv_expired", "required_posts": ["post_intake", "post_review", "post_release"], "object_ids": ["obj_old_profile"], "max_claims": 1, "valid_from": 500, "valid_to": 600, "at": 500},
+    {"command": "issue_ticket", "request_id": "fix-expired-sig-1", "application_id": "app_expired", "post_id": "post_intake", "agent_id": "ag_ada_laptop", "at": 501},
+    {"command": "issue_ticket", "request_id": "fix-expired-sig-2", "application_id": "app_expired", "post_id": "post_review", "agent_id": "ag_bob_desk", "at": 502},
+    {"command": "issue_ticket", "request_id": "fix-expired-sig-3", "application_id": "app_expired", "post_id": "post_release", "agent_id": "ag_cara_hsm", "at": 503}
+  ]
+}

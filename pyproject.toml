@@ -1,0 +1,22 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "escrowclock"
+version = "1.0.0"
+description = "Standard-library SQLite escrow ticket, one-time claim, crash recovery, and temporal audit simulation"
+requires-python = ">=3.12"
+dependencies = []
+
+[project.scripts]
+escrowclock = "escrowclock.cli:console_main"
+issue = "escrowclock.cli:issue_main"
+take = "escrowclock.cli:take_main"
+audit = "escrowclock.cli:audit_main"
+escrowclock-issue = "escrowclock.cli:issue_main"
+escrowclock-take = "escrowclock.cli:take_main"
+escrowclock-audit = "escrowclock.cli:audit_main"
+
+[tool.setuptools.packages.find]
+include = ["escrowclock*"]
